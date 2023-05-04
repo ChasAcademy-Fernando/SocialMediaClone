@@ -1,4 +1,5 @@
 import Stories from "./Stories";
+import StatusBox from "./StatusBox";
 
 const Feed = () => {
     return ( 
@@ -6,7 +7,7 @@ const Feed = () => {
             
             <div className="mx-auto mx-w-md md:max-w-lg lg:max-w-2xl">
                 <Stories/>
-                {/*Stories */}
+                <StatusBox/>
                 {/*Stories */}
 
 
