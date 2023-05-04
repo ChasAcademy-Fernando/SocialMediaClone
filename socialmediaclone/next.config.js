@@ -4,7 +4,8 @@ const nextConfig = {
     domains:[
       'cdn-icons-png.flaticon.com',
       'platform-lookaside.fbsbx.com',
-      'links.papareact.com'
+      'links.papareact.com',
+      'firebasestorage.googleapis.com'
     ]
   },
   reactStrictMode: true,
