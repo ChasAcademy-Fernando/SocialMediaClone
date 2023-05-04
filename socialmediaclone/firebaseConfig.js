@@ -1,5 +1,5 @@
-import firebase from "firebase"
-import "firebase/storage"
+import {initializeApp} from "firebase/app"
+import {getFirestore} from "firebase/firestore" 
 const firebaseConfig = {
     apiKey: "AIzaSyDhraoDaa1nX0Kom178XGtdPLUV9ee_PBA",
     authDomain: "socialmediaclone-fb-1.firebaseapp.com",
@@ -9,9 +9,9 @@ const firebaseConfig = {
     appId: "1:554894651974:web:61498cbff5e490f6671047"
   };
 
-  const app = !firebase.apps.length ? firebase.initializeApp(firebaseConfig):firebase.app();
+  const app = initializeApp(firebaseConfig) 
 
-  const db = app.firestore();
-  const storage = firebase.storage();
-
-  export {db , storage}
+  const db = getFirestore(app);
+  
+  
+  export {db}

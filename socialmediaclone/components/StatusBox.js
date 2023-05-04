@@ -3,9 +3,8 @@ import { useSession } from "next-auth/react";
 import { CameraIcon, VideoCameraIcon } from "@heroicons/react/solid";
 import { EmojiHappyIcon } from "@heroicons/react/outline";
 import { useRef } from "react";
-import firebase from "firebase"
-import {db} from "../firebase"
-
+import { db } from "@/firebaseConfig";
+import {getDocs, collection, Firestore, Timestamp} from "firebase/firestore"
 
 const StatusBox = () => {
     const {data:session}=useSession();
@@ -13,16 +12,17 @@ const StatusBox = () => {
 
     const sendPost = (e) =>{
         e.preventDefault();
-        if(!inputRef.current.value) return;
+        console.log(Timestamp.now)
+        /* if(!inputRef.current.value) return;
 
         db.collection('posts').add({
             message:inputRef.current.value,
             name: session.user.name,
             email: session.user.email,
             image: session.user.image,
-            timestamp: firebase.firestore.FieldValue.serverTimeStamp()
+            timestamp: Firebase.Firestore.timestamp
         })
-
+ */
         inputRef.current.value = '';
     };
     return ( 
