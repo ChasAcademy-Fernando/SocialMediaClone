@@ -2,57 +2,103 @@ import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { CameraIcon, VideoCameraIcon } from "@heroicons/react/solid";
 import { EmojiHappyIcon } from "@heroicons/react/outline";
-import { useRef } from "react";
-import { db } from "@/firebaseConfig";
-import {getDocs, collection, Firestore, Timestamp} from "firebase/firestore"
+import { useRef, useState } from "react";
+import { db,storage } from "@/firebaseConfig";
+import { ref, uploadBytes,getDownloadURL} from "firebase/storage";
+import {collection,addDoc, serverTimestamp,setDoc, doc} from "firebase/firestore"
 
 const StatusBox = () => {
     const {data:session}=useSession();
     const inputRef = useRef(null);
+    const filePickerRef =useRef(null);
+    const [imageToPost, setImageToPost] = useState(null)
+    const [imageToPreview, setImageToPreview] = useState(null)
+
+    const addImageToPost = (e) =>{
+        const image = e.target.files[0];
+        if(!image) return;
+               
+        const reader = new FileReader();
+        if(image){
+            reader.readAsDataURL(image)
+        }
+        reader.onload = (readerEvent)=>{
+            setImageToPreview(readerEvent.target.result)
+        }
+        setImageToPost(image)
+    }
+
+    const removeImage = () =>{
+        setImageToPost(null);
+    }
 
     const sendPost = (e) =>{
         e.preventDefault();
-        console.log(Timestamp.now)
-        /* if(!inputRef.current.value) return;
+        if(!inputRef.current.value) return;
 
-        db.collection('posts').add({
+        addDoc(collection(db,'posts'),{
             message:inputRef.current.value,
             name: session.user.name,
             email: session.user.email,
             image: session.user.image,
-            timestamp: Firebase.Firestore.timestamp
+            timestamp: serverTimestamp()
+        }).then(file =>{
+            if(imageToPost){
+                console.log(imageToPost)
+                const storageRef = ref(storage,`posts/${file.id}`);
+                uploadBytes(storageRef, imageToPost).then((snapshot)=>{
+                    getDownloadURL(snapshot.ref).then((url)=>{
+                        setDoc(doc(db,`posts/${file.id}`),{
+                            postImage:url
+                        },{merge:true})
+                        
+                    })
+                })
+               
+                removeImage();
+
+                
+            }
         })
- */
+        
+
         inputRef.current.value = '';
     };
     return ( 
     <div className=" bg-white p-2 rounded-2xl shadow-md text-gray-500 font-medium mt-6">
-        <div className="flex space-x-4 p-4 items-center">
+        <div className="flex sm:space-x-4 p-4 items-center max-w-full">
             <Image 
-            className=" rounded-full"
+            className=" hidden  sm:inline-flex rounded-full"
             src={session.user.image}
             width={40}
             height={40}
             />
-            <form className=" flex flex-1">
+            <form className=" flex flex-1 break-words">
                 <input type="text" 
                 ref={inputRef}
                 placeholder={`What's on your mind, ${session.user.name}?`}
-                className=" rounded-full focus:outline-none h-12 bg-gray-100 flex-grow px-5"
+                className=" rounded-full focus:outline-none h-12 bg-gray-100 flex-grow px-5 text-xs sm:text-base"
                 />
                 <button className="hidden" type="submit" onClick={sendPost}>Submit</button>
             </form>
+            {imageToPost && (
+                <div onClick={removeImage} className=" flex-col flex hover:brightness-110 transition duration-150 transform hover:scale-105 cursor-pointer">
+                    <img src={imageToPreview} className=" object-contain h-10" />
+                    <p className=" text-xs text-red-500 text-center">Remove</p>
+                </div>
+            )}
         </div>
         <div className=" justify-evenly flex p-3 border-t">
-             <div className="inputIcon">
+             <div className="inputIcon flex-col sm:flex-row">
                 <VideoCameraIcon className=" h-7 text-red-500"/>
                 <p className="text-xs sm:text-sm xl:text-base">Live Video</p>
              </div>
-             <div className="inputIcon">
+             <div className="inputIcon flex-col sm:flex-row" onClick={()=> filePickerRef.current.click()}>
                 <CameraIcon className=" h-7 text-green-400"/>
-                <p className="text-xs sm:text-sm xl:text-base">Photo/VIdeo</p>
+                <p className="text-xs sm:text-sm xl:text-base">Photo/Video</p>
+                <input ref={filePickerRef} type="file" onChange={addImageToPost} hidden />
              </div>
-             <div className="inputIcon">
+             <div className="inputIcon flex-col sm:flex-row hidden sm:inline-flex">
                 <EmojiHappyIcon className=" h-7 text-yellow-300"/>
                 <p className="text-xs sm:text-sm xl:text-base">Feeling/Activity</p>
              </div>

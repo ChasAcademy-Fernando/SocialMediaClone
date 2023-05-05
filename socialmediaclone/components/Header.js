@@ -21,7 +21,7 @@ const Header = () => {
     const { data: session } = useSession();
     console.log(session)
         return ( 
-        <div className=" sticky flex top-0 z-50 bg-white items-center p-2 lg:px-5 shadow-md">
+        <div className=" sticky flex top-0 z-50 bg-white items-center p-2 lg:px-5 shadow-md ">
         {/*Left Header */}
         <div className=" flex items-center">
             <Image src='https://cdn-icons-png.flaticon.com/512/3281/3281613.png' 
@@ -30,14 +30,14 @@ const Header = () => {
 
             <div className=" flex ml-2 items-center bg-gray-200 p-2 rounded-full">
                 <SearchIcon className=" h-6 text-gray-600"/>
-                <input className=" hidden md:inline-flex ml-2 items-center bg-transparent outline-none placeholder-gray-500 flex-shrink" 
+                <input className=" hidden lg:inline-flex ml-2 items-center bg-transparent outline-none placeholder-gray-500 flex-shrink" 
                 type="text" 
                 placeholder="Searh Something" />
             </div>
         </div>
         {/*Center Header*/}
         <div className="flex justify-center flex-grow">
-            <div className=" flex space-x-6 md:space-x-2">
+            <div className=" flex space-x-3 sm:space-x-4">
                 <HeaderIcon active Icon={HomeIcon} />
                 <HeaderIcon Icon={FlagIcon} />
                 <HeaderIcon Icon={PlayIcon} />
@@ -52,7 +52,7 @@ const Header = () => {
             onClick={signOut}
             width={40}
             height={40}
-            className=" rounded-full cursor-pointer fixed"
+            className=" rounded-full cursor-pointer"
             src={session.user.image}
             />
 
