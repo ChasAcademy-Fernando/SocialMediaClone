@@ -26,7 +26,9 @@ const Header = () => {
         <div className=" flex items-center">
             <Image src='https://cdn-icons-png.flaticon.com/512/3281/3281613.png' 
             width={40} 
-            height={40}/>
+            height={40}
+            alt="treehouse icon"
+            />
 
             <div className=" flex ml-2 items-center bg-gray-200 p-2 rounded-full">
                 <SearchIcon className=" h-6 text-gray-600"/>
@@ -54,6 +56,7 @@ const Header = () => {
             height={40}
             className=" rounded-full cursor-pointer"
             src={session.user.image}
+            alt="profile picture"
             />
 
             <p className=" whitespace-nowrap font-semibold pr-3 hidden xl:inline-flex text-sm">{session.user.name}</p> {/*fetch name from db */}

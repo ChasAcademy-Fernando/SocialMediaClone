@@ -8,6 +8,7 @@ import Widgets from '@/components/Widgets';
 
 export default function Home() {
   const { data: session } = useSession();
+  if(session) console.log("this is the user", session.user.image, session.user.name)
 
   if(!session) return <Login/>;
   
