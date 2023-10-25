@@ -1,13 +1,13 @@
-import { useSession } from "next-auth/react";
 import StoryCard from "./Storycard";
+import { useUser } from "@clerk/nextjs";
 
 
 const Stories = () => {
-    const {data:session} = useSession();
+    const {user} = useUser()
     const stories = [{
-        name:`${session.user.name}`,
-        src: `${session.user.image}`,
-        profile: `${session.user.image}`
+        name:`${user.fullNamename}`,
+        src: `${user.imageUrl}`,
+        profile: `${user.imageUrl}`
     },
     {
         name:'Elon Musk',

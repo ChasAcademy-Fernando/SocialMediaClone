@@ -6,7 +6,8 @@ const nextConfig = {
       'platform-lookaside.fbsbx.com',
       'links.papareact.com',
       'firebasestorage.googleapis.com',
-      'images.unsplash.com'
+      'images.unsplash.com',
+      'img.clerk.com'
       
     ]
   },

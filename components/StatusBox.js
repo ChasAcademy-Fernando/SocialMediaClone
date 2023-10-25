@@ -1,18 +1,20 @@
 import Image from "next/image";
-import { useSession } from "next-auth/react";
 import { CameraIcon, VideoCameraIcon } from "@heroicons/react/solid";
 import { EmojiHappyIcon } from "@heroicons/react/outline";
 import { useRef, useState } from "react";
 import { db,storage } from "@/firebaseConfig";
 import { ref, uploadBytes,getDownloadURL} from "firebase/storage";
 import {collection,addDoc, serverTimestamp,setDoc, doc} from "firebase/firestore"
+import { useUser } from "@clerk/nextjs";
 
 const StatusBox = () => {
-    const {data:session}=useSession();
+    const {user}= useUser()
     const inputRef = useRef(null);
     const filePickerRef =useRef(null);
     const [imageToPost, setImageToPost] = useState(null)
     const [imageToPreview, setImageToPreview] = useState(null)
+
+
 
     const addImageToPost = (e) =>{
         const image = e.target.files[0];
@@ -38,9 +40,9 @@ const StatusBox = () => {
 
         addDoc(collection(db,'posts'),{
             message:inputRef.current.value,
-            name: session.user.name,
-            email: session.user.email,
-            image: session.user.image,
+            name: user.fullName,
+            email: user.emailAddresses[0].emailAddress,
+            image: user.imageUrl,
             timestamp: serverTimestamp()
         }).then(file =>{
             if(imageToPost){
@@ -69,14 +71,14 @@ const StatusBox = () => {
         <div className="flex sm:space-x-4 p-4 items-center max-w-full">
             <Image 
             className=" hidden  sm:inline-flex rounded-full"
-            src={session.user.image}
+            src={user.imageUrl}
             width={40}
             height={40}
             />
             <form className=" flex flex-1 break-words">
                 <input type="text" 
                 ref={inputRef}
-                placeholder={`What's on your mind, ${session.user.name}?`}
+                placeholder={`What's on your mind, ${user.firstName}?`}
                 className=" rounded-full focus:outline-none h-12 bg-gray-100 flex-grow px-5 text-xs sm:text-base"
                 />
                 <button className="hidden" type="submit" onClick={sendPost}>Submit</button>

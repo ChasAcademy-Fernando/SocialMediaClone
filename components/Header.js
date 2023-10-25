@@ -16,10 +16,13 @@ import {
 } from "@heroicons/react/outline"
 
 import HeaderIcon from "./HeaderIcon";
+import { useUser, UserButton } from "@clerk/nextjs";
 
 const Header = () => {
-    const { data: session } = useSession();
-    console.log(session)
+    const {user}= useUser()
+
+   
+
         return ( 
         <div className=" sticky flex top-0 z-50 bg-white items-center p-2 lg:px-5 shadow-md ">
         {/*Left Header */}
@@ -50,16 +53,9 @@ const Header = () => {
         {/*Right Header */}
         <div className=" flex items-center justify-end sm:space-x-2">
             {/*Profile pic */}
-            <Image
-            onClick={signOut}
-            width={40}
-            height={40}
-            className=" rounded-full cursor-pointer"
-            src={session.user.image}
-            alt="profile picture"
-            />
+            <UserButton/>
 
-            <p className=" whitespace-nowrap font-semibold pr-3 hidden xl:inline-flex text-sm">{session.user.name}</p> {/*fetch name from db */}
+            <p className=" whitespace-nowrap font-semibold pr-3 hidden xl:inline-flex text-sm">{user.fullName}</p> {/*fetch name from db */}
             <ViewGridIcon className="icon" />
             <ChatIcon className="icon"/>
             <BellIcon className="icon"/>
